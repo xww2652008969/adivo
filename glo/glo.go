@@ -1,0 +1,3 @@
+package glo
+
+var GloToken = ""
