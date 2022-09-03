@@ -17,7 +17,7 @@ type Date struct {
 }
 
 func Gettoken() {
-	url := "http://mhapp.vxerfxs.shop/api/user/traveler"
+	url := "http://mhapp.vxerfxs.2shop/api/user/traveler"
 	new := time.Now().UnixNano()
 	str := strconv.FormatInt(new, 10)
 	md5 := utils.Gedmd5([]byte(str[3:8]))

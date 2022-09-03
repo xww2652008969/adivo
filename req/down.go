@@ -6,15 +6,12 @@ import (
 	"github.com/grafov/m3u8"
 	"hdow/utils"
 	"io/ioutil"
+	"strconv"
 	"strings"
+	"time"
 )
 
 var key = "x3GZk8tbgc6xSPSiBdSPBQ=="
-
-type Vido struct {
-	Id   int
-	Data []byte
-}
 
 func Redts(url string) {
 	s := strings.Split(url, "/")
@@ -42,6 +39,11 @@ func Redts(url string) {
 		masterpl := p.(*m3u8.MasterPlaylist)
 		fmt.Printf("%+v\n", masterpl)
 	}
+	for k, v := range urllist {
+		go do(k, v)
+		fmt.Println(k, v)
+	}
+	time.Sleep(10)
 	//var hda []byte
 	//for k, v := range urllist {
 	//	fmt.Println(k)
@@ -60,5 +62,5 @@ func do(k int, url string) {
 	utils.PwdKey, _ = base64.StdEncoding.DecodeString(key)
 	d, _ := ioutil.ReadAll(res.Body)
 	dde, _ := utils.AesDecrypt(d, utils.PwdKey)
-	fmt.Println(k, len(dde))
+	utils.Writefile(strconv.Itoa(k)+".mp4", dde)
 }

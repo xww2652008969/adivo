@@ -20,6 +20,7 @@ func main() {
 	////fmt.Println(req.Getlist("30", "20", "1"))
 	//fmt.Println(req.Getvedio("58647"))
 	//req.Redts("https://vedss.ilovyo.cn/lfb/o0/w0/4f/v1/5eeba35c9c7a40aeaa6b1b19f37a3d38.m3u8")
+	fmt.Println(glo.GloToken)
 	for {
 		fmt.Scanln(&sc)
 		if sc == "1" {
