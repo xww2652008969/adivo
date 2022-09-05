@@ -17,7 +17,7 @@ type Date struct {
 }
 
 func Gettoken() {
-	url := "http://mhapp.vxerfxs.2shop/api/user/traveler"
+	url := "https://mhapp.vxxsred.xyz/api/user/traveler"
 	new := time.Now().UnixNano()
 	str := strconv.FormatInt(new, 10)
 	md5 := utils.Gedmd5([]byte(str[3:8]))
@@ -32,7 +32,6 @@ func Gettoken() {
 	header["Accept"] = "application/json"
 	header["Content-Type"] = "application/json"
 	header["deviceId"] = "a99a87c3bf3407317dc78278a31613l6"
-	header["Host"] = "mhapp.vxnbbrs.xyz"
 	header["Connection"] = "Keep-Alive"
 	header["Accept-Encoding"] = "gzip"
 	header["s"] = md5

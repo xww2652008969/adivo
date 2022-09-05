@@ -8,12 +8,12 @@ import (
 	"io/ioutil"
 	"strconv"
 	"strings"
-	"time"
 )
 
 var key = "x3GZk8tbgc6xSPSiBdSPBQ=="
 
 func Redts(url string) {
+	utils.Createfolder("wwt")
 	s := strings.Split(url, "/")
 	var news string
 	for k, v := range s {
@@ -39,11 +39,17 @@ func Redts(url string) {
 		masterpl := p.(*m3u8.MasterPlaylist)
 		fmt.Printf("%+v\n", masterpl)
 	}
+	ch := make(chan int)
 	for k, v := range urllist {
-		go do(k, v)
-		fmt.Println(k, v)
+		go do(k, v, ch)
 	}
-	time.Sleep(10)
+	var a int
+	for true {
+		if a < len(urllist) {
+			a = a + <-ch
+		}
+		break
+	}
 	//var hda []byte
 	//for k, v := range urllist {
 	//	fmt.Println(k)
@@ -57,10 +63,11 @@ func Redts(url string) {
 	//utils.Writefile(strconv.Itoa(rand.Int())+".mp4", hda)
 	//fmt.Println("写入完成")
 }
-func do(k int, url string) {
+func do(k int, url string, ch chan int) {
 	res, _ := utils.Httpget(url, nil)
 	utils.PwdKey, _ = base64.StdEncoding.DecodeString(key)
 	d, _ := ioutil.ReadAll(res.Body)
 	dde, _ := utils.AesDecrypt(d, utils.PwdKey)
-	utils.Writefile(strconv.Itoa(k)+".mp4", dde)
+	utils.Writefile("wwt/"+strconv.Itoa(k)+".mp4", dde)
+	ch <- 1
 }
