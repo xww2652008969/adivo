@@ -6,11 +6,15 @@ import (
 	"github.com/grafov/m3u8"
 	"hdow/utils"
 	"io/ioutil"
-	"strconv"
 	"strings"
 )
 
 var key = "x3GZk8tbgc6xSPSiBdSPBQ=="
+
+type vido struct {
+	id   int
+	date []byte
+}
 
 func Redts(url string) {
 	utils.Createfolder("wwt")
@@ -39,16 +43,23 @@ func Redts(url string) {
 		masterpl := p.(*m3u8.MasterPlaylist)
 		fmt.Printf("%+v\n", masterpl)
 	}
+	var vida = make([]vido, len(urllist))
 	ch := make(chan int)
 	for k, v := range urllist {
-		go do(k, v, ch)
+		go do(k, v, ch, vida)
 	}
 	var a int
 	for true {
 		if a < len(urllist) {
 			a = a + <-ch
+		} else {
+			var datee []byte
+			for _, vv := range vida {
+				datee = append(datee, vv.date...)
+			}
+			utils.Writefile("wwt/"+"xww.mp4", datee)
+			break
 		}
-		break
 	}
 	//var hda []byte
 	//for k, v := range urllist {
@@ -63,11 +74,12 @@ func Redts(url string) {
 	//utils.Writefile(strconv.Itoa(rand.Int())+".mp4", hda)
 	//fmt.Println("写入完成")
 }
-func do(k int, url string, ch chan int) {
+func do(k int, url string, ch chan int, vi []vido) {
 	res, _ := utils.Httpget(url, nil)
 	utils.PwdKey, _ = base64.StdEncoding.DecodeString(key)
 	d, _ := ioutil.ReadAll(res.Body)
 	dde, _ := utils.AesDecrypt(d, utils.PwdKey)
-	utils.Writefile("wwt/"+strconv.Itoa(k)+".mp4", dde)
+	vi[k].id = k
+	vi[k].date = dde
 	ch <- 1
 }
